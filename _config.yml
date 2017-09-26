@@ -1,0 +1,40 @@
+# Basic
+title: 一越
+subtitle: 不塞不流,不止不行。
+welcome_message: 我的一些东西。
+description: 一个iOS小程序猿的杂记。
+creator: <a href=""></a>
+
+url: "sunyiyue.github.io"
+
+permalink: /:year/:month/:title/
+
+# Format
+highlighter: plain
+
+# supported colors: blue, green, purple, red, orange or slate. If you need clear, leave it empty.
+cover_color: 
+
+blog_button:
+    title: 博客
+    description: 访问博客
+
+
+
+
+# Pagination
+gems: [jekyll-paginate]
+paginate: 10
+paginate_path: "page/:num/"
+
+# Comment
+comment:
+    #disqus: sy
+    duoshuo: yiyiyue
+# Social
+social:
+    weibo: dabitch
+    mail: 494367108@qq.com
+
+# Google Analytics
+
