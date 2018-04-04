@@ -1,43 +1,25 @@
 <section class="post-comments">
   {% if site.comment.disqus %}
-<!--    <div id="disqus_thread"></div>-->
-<!--    <script>-->
-<!--    -->
-<!--    var disqus_config = function () {-->
-<!--        this.page.url = "{{ page.url | prepend: site.baseurl | prepend: site.url }}";-->
-<!--        this.page.identifier = "{{ page.url }}";-->
-<!--    };-->
-<!---->
-<!--    var disqus_shortname = '{{ sunyiyue-github-io }}';-->
-<!--    -->
-<!--    (function() { // DON'T EDIT BELOW THIS LINE-->
-<!--        var d = document, s = d.createElement('script');-->
-<!--        s.src = '//' + disqus_shortname + '.disqus.com/embed.js';-->
-<!--        s.setAttribute('data-timestamp', +new Date());-->
-<!--            (d.head || d.body).appendChild(s);-->
-<!--        })();-->
-<!--    </script>-->
-<!--    <noscript>要查看<a href="http://disqus.com/?ref_noscript"> Disqus </a>评论，请启用 JavaScript</noscript>-->
-    
-    
     <div id="disqus_thread"></div>
     <script>
-        
-        var disqus_config = function () {
-            this.page.url = "{{ page.url | prepend: site.baseurl | prepend: site.url }}";
-            this.page.identifier = "{{ page.url }}";
-        };
     
-    var disqus_shortname = 'onevcat';
-    
+    var disqus_config = function () {
+        this.page.url = "{{ page.url | prepend: site.baseurl | prepend: site.url }}";
+        this.page.identifier = "{{ page.url }}";
+    };
+
+   // var disqus_shortname = '{{ sunyiyue-github-io }}';
+    var disqus_shortname = 'sunyiyue-github-io';
+
     (function() { // DON'T EDIT BELOW THIS LINE
-     var d = document, s = d.createElement('script');
-     s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-     s.setAttribute('data-timestamp', +new Date());
-     (d.head || d.body).appendChild(s);
-     })();
-        </script>
+        var d = document, s = d.createElement('script');
+        s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
     <noscript>要查看<a href="http://disqus.com/?ref_noscript"> Disqus </a>评论，请启用 JavaScript</noscript>
+
 
 <!--    <div id="disqus_thread"></div>-->
 <!--    <script>-->
