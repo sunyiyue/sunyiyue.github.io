@@ -8,13 +8,29 @@
         this.page.identifier = "{{ page.url }}";
     };
 
+
+
+
+
+
     var disqus_shortname = '{{ sunyiyue-github-io }}';
+    
+    
+    if ((page.layout == 'post' || page.layout == 'page') && disqus_shortname && page.comments){ %>
+        <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = '<%= config.url %>/<%= page.path %>';
+            this.page.identifier = '/<%= page.path %>';
+            this.page.title = '<%= page.title %>';
+        };
     
     (function() { // DON'T EDIT BELOW THIS LINE
         var d = document, s = d.createElement('script');
-        s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        d.type = 'text/javascript';
+        d.async = true;
+        s.src = '//' + disqus_shortname + '.disqus.com/<% if (page.comments){ %>embed.js<% } else { %>count.js<% } %>';
         s.setAttribute('data-timestamp', +new Date());
-            (d.head || d.body).appendChild(s);
+        (d.head || d.body).appendChild(s);
         })();
     </script>
     <noscript>要查看<a href="http://disqus.com/?ref_noscript"> Disqus </a>评论，请启用 JavaScript</noscript>
