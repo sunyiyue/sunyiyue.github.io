@@ -52,6 +52,8 @@ date: 2018-03-30 13:05:00.000000000 +09:00
 | readMsgId |  NSNumber   |                    已读消息ID                    |
 | timestamp |  NSNumber   |                  会话变更时间戳                  |
 |    cnt    | NSNumber |                   未读消息数量                   |
+
+
 ### 上传语音、文件消息所用对象 CCUploadModel(NSObject)
 
 |   字段    |  类型   |                       含义                       |
