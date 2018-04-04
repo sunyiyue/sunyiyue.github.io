@@ -24,8 +24,8 @@
     <script>
         
         var disqus_config = function () {
-            this.page.url = "http://onevcat.com/2016/11/pop-cocoa-1/";
-            this.page.identifier = "/2016/11/pop-cocoa-1/";
+            this.page.url = "{{ page.url | prepend: site.baseurl | prepend: site.url }}";
+            this.page.identifier = "{{ page.url }}";
         };
     
     var disqus_shortname = 'onevcat';
