@@ -149,11 +149,7 @@ param successBlock 消息ID
 @param errorBlock 错误信息
 @return 发送的消息实体
 */
-- (CCMessage *)sendMessage:(CCConversationType)conversationType
-targetId:(NSString *)targetId
-content:(CCMessageContent *)messageContent
-success:(void (^)(NSNumber *messageId))successBlock
-error:(void(^)(CCError *error,NSNumber *messageId))errorBlock;
+- (CCMessage *)sendMessage:(CCConversationType)conversationType targetId:(NSString *)targetId content:(CCMessageContent *)messageContent success:(void (^)(NSNumber *messageId))successBlock error:(void(^)(CCError *error,NSNumber *messageId))errorBlock;
 
 /**
 发送媒体消息 （包括 图片 和 文件消息）
@@ -166,12 +162,7 @@ param successBlock 消息ID
 @param errorBlock 错误信息
 @return 发送的消息实体
 */
-- (CCMessage *)sendMediaMessage:(CCConversationType)conversationType
-targetId:(NSString *)targetId
-content:(CCMessageContent *)messageContent
-progress:(void (^)(int progress, NSNumber *messageId))progressBlock
-success:(void (^)(NSNumber *messageId))successBlock
-error:(void(^)(CCError *error,NSNumber *messageId))errorBlock;
+- (CCMessage *)sendMediaMessage:(CCConversationType)conversationType targetId:(NSString *)targetId content:(CCMessageContent *)messageContent progress:(void (^)(int progress, NSNumber *messageId))progressBlock success:(void (^)(NSNumber *messageId))successBlock error:(void(^)(CCError *error,NSNumber *messageId))errorBlock;
 
 /**
 发送自定义消息
@@ -185,14 +176,7 @@ error:(void(^)(CCError *error,NSNumber *messageId))errorBlock;
 @param successBlock 消息ID
 @param errorBlock 错误信息
 */
-- (void)sendCustomMessage:(CCConversationType)conversationType
-targetId:(NSString *)targetId
-mType:(NSNumber *)mType
-data:(NSString *)json
-search:(NSString *)search
-atList:(NSArray *)atList
-success:(void (^)(NSNumber *messageId))successBlock
-error:(void(^)(CCError *error,NSNumber *messageId))errorBlock;
+- (void)sendCustomMessage:(CCConversationType)conversationType targetId:(NSString *)targetId mType:(NSNumber *)mType data:(NSString *)json search:(NSString *)search atList:(NSArray *)atList success:(void (^)(NSNumber *messageId))successBlock error:(void(^)(CCError *error,NSNumber *messageId))errorBlock;
 /**
 获取最近联系人/讨论组(全量/增量)
 
@@ -201,10 +185,7 @@ error:(void(^)(CCError *error,NSNumber *messageId))errorBlock;
 @param successBlock 联系人/讨论组信息组成的数组
 @param errorBlock 错误信息
 */
-- (void)getRecentContact:(NSInteger)size
-timestamp:(NSNumber *)timestamp
-success:(void (^)(NSArray *contactArray))successBlock
-error:(void(^)(CCError *error))errorBlock;
+- (void)getRecentContact:(NSInteger)size timestamp:(NSNumber *)timestamp success:(void (^)(NSArray *contactArray))successBlock error:(void(^)(CCError *error))errorBlock;
 
 /**
 获取某条消息ID之后的消息 重复调用该接口可以获取该消息ID之后的所有消息 获取消息列表按时间逆序返回
@@ -216,12 +197,7 @@ error:(void(^)(CCError *error))errorBlock;
 @param successBlock more为本次获得数据后续是否还存在数据 msgs内为获取到的消息列表
 @param errorBlock 错误信息
 */
-- (void)getNextRecord:(NSString *)sid
-type:(CCConversationType)conversationType
-size:(NSInteger)size
-msgId:(NSNumber *)msgId
-success:(void (^)(BOOL more,NSArray *recordArray))successBlock
-error:(void(^)(CCError *error))errorBlock;
+- (void)getNextRecord:(NSString *)sid type:(CCConversationType)conversationType size:(NSInteger)size msgId:(NSNumber *)msgId success:(void (^)(BOOL more,NSArray *recordArray))successBlock error:(void(^)(CCError *error))errorBlock;
 
 /**
 获取某条消息ID之前更多的消息记录 如果没有消息ID，则表明获取最新的消息记录 消息数据按时间倒序返回
@@ -233,12 +209,7 @@ error:(void(^)(CCError *error))errorBlock;
 @param successBlock more为本次获得数据后续是否还存在数据 msgs内为获取到的消息列表
 @param errorBlock 错误信息
 */
-- (void)getMoreRecord:(NSString *)sid
-type:(CCConversationType)conversationType
-size:(NSInteger *)size
-msgId:(NSNumber *)msgId
-success:(void (^)(BOOL more,NSArray *recordArray))successBlock
-error:(void(^)(CCError *error))errorBlock;
+- (void)getMoreRecord:(NSString *)sid type:(CCConversationType)conversationType size:(NSInteger *)size msgId:(NSNumber *)msgId success:(void (^)(BOOL more,NSArray *recordArray))successBlock error:(void(^)(CCError *error))errorBlock;
 
 /**
 获取会话中成员的已读状态
@@ -249,11 +220,7 @@ error:(void(^)(CCError *error))errorBlock;
 @param successBlock CCReadStat
 @param errorBlock 错误信息
 */
-- (void)getReadStat:(NSString *)sid
-type:(CCConversationType)conversationType
-timestamp:(NSNumber *)timestamp
-success:(void (^)(CCReadStat *readStat))successBlock
-error:(void(^)(CCError *error))errorBlock;
+- (void)getReadStat:(NSString *)sid type:(CCConversationType)conversationType timestamp:(NSNumber *)timestamp success:(void (^)(CCReadStat *readStat))successBlock error:(void(^)(CCError *error))errorBlock;
 
 /**
 撤回自己发送的消息
@@ -264,11 +231,7 @@ error:(void(^)(CCError *error))errorBlock;
 @param successBlock 撤回成功的回调 [messageId:撤回的消息ID，该消息已经变更为新的消息]
 @param errorBlock 错误信息
 */
-- (void)chatRecall:(NSString *)sid
-type:(CCConversationType)conversationType
-msgId:(NSNumber *)msgId
-success:(void (^)(NSNumber *messageId))successBlock
-error:(void(^)(CCError *error))errorBlock;
+- (void)chatRecall:(NSString *)sid type:(CCConversationType)conversationType msgId:(NSNumber *)msgId success:(void (^)(NSNumber *messageId))successBlock error:(void(^)(CCError *error))errorBlock;
 /**
 将消息置为已读状态
 
@@ -278,11 +241,7 @@ error:(void(^)(CCError *error))errorBlock;
 @param successBlock 置已读成功success返回true
 @param errorBlock 错误信息
 */
-- (void)chatRead:(NSString *)sid
-type:(CCConversationType)conversationType
-msgId:(NSNumber *)msgId
-success:(void (^)(BOOL success))successBlock
-error:(void(^)(CCError *error))errorBlock;
+- (void)chatRead:(NSString *)sid type:(CCConversationType)conversationType msgId:(NSNumber *)msgId success:(void (^)(BOOL success))successBlock error:(void(^)(CCError *error))errorBlock;
 /**
 批量置已读
 
@@ -292,11 +251,7 @@ error:(void(^)(CCError *error))errorBlock;
 @param successBlock 置已读成功success返回true
 @param errorBlock 错误信息
 */
-- (void)chatsRead:(NSArray *)ids
-type:(NSArray *)types
-msgIds:(NSArray *)msgIds
-success:(void (^)(BOOL success,NSString *message))successBlock
-error:(void(^)(CCError *error))errorBlock;
+- (void)chatsRead:(NSArray *)ids type:(NSArray *)types msgIds:(NSArray *)msgIds success:(void (^)(BOOL success,NSString *message))successBlock error:(void(^)(CCError *error))errorBlock;
 
 /**
 会话消息输入，目前只支持1V1
@@ -306,10 +261,7 @@ error:(void(^)(CCError *error))errorBlock;
 @param successBlock 成功时success为true 失败时success为false,返回错误信息msg
 @param errorBlock 错误信息
 */
-- (void)chatTyping:(NSString *)sid
-type:(CCConversationType)conversationType
-success:(void (^)(BOOL success,NSString *message))successBlock
-error:(void(^)(CCError *error))errorBlock;
+- (void)chatTyping:(NSString *)sid type:(CCConversationType)conversationType success:(void (^)(BOOL success,NSString *message))successBlock error:(void(^)(CCError *error))errorBlock;
 
 /**
 搜索指定会话中包含关键字的消息记录
@@ -322,13 +274,7 @@ error:(void(^)(CCError *error))errorBlock;
 @param successBlock 消息实体组成的数组
 @param errorBlock 错误信息
 */
-- (void)chatSearch:(NSString *)sid
-type:(CCConversationType)conversationType
-content:(NSString *)content
-size:(NSInteger)size
-page:(NSInteger)page
-success:(void (^)(NSArray *recordArray))successBlock
-error:(void(^)(CCError *error))errorBlock;
+- (void)chatSearch:(NSString *)sid type:(CCConversationType)conversationType content:(NSString *)content size:(NSInteger)size page:(NSInteger)page success:(void (^)(NSArray *recordArray))successBlock error:(void(^)(CCError *error))errorBlock;
 
 /**
 搜索全部会话中包含关键字的消息记录
@@ -339,11 +285,7 @@ error:(void(^)(CCError *error))errorBlock;
 @param successBlock 消息实体组成的数组
 @param errorBlock 错误信息
 */
-- (void)chatSearchAll:(NSString *)content
-size:(NSInteger)size
-page:(NSInteger)page
-success:(void (^)(NSArray *recordArray))successBlock
-error:(void(^)(CCError *error))errorBlock;
+- (void)chatSearchAll:(NSString *)content size:(NSInteger)size page:(NSInteger)page success:(void (^)(NSArray *recordArray))successBlock error:(void(^)(CCError *error))errorBlock;
 
 /**
 创建讨论组
@@ -353,10 +295,7 @@ error:(void(^)(CCError *error))errorBlock;
 @param successBlock 返回 true 成功 false失败
 @param errorBlock 错误信息
 */
-- (void)createDiscussion:(NSString *)discussionId
-userIdList:(NSArray *)userIdList
-success:(void (^)(BOOL success,NSString *message))successBlock
-error:(void (^)(CCError *error))errorBlock;
+- (void)createDiscussion:(NSString *)discussionId userIdList:(NSArray *)userIdList success:(void (^)(BOOL success,NSString *message))successBlock error:(void (^)(CCError *error))errorBlock;
 
 /**
 讨论组添加成员
@@ -370,10 +309,7 @@ error:(void (^)(CCError *error))errorBlock;
 
 members内为添加成员后讨论组成员列表，如果讨论组成员之前就存在讨论组中，也会返回成功
 */
-- (void)addMemberToDiscussion:(NSString *)discussionId
-userIdList:(NSArray *)userIdList
-success:(void (^)(NSArray *memberList))successBlock
-error:(void (^)(CCError *error))errorBlock;
+- (void)addMemberToDiscussion:(NSString *)discussionId userIdList:(NSArray *)userIdList success:(void (^)(NSArray *memberList))successBlock error:(void (^)(CCError *error))errorBlock;
 
 /**
 获取讨论组成员列表
@@ -382,9 +318,7 @@ error:(void (^)(CCError *error))errorBlock;
 @param successBlock 返回 讨论组成员列表
 @param errorBlock 错误信息
 */
-- (void)getDiscussion:(NSString *)discussionId
-success:(void (^)(NSArray *memberList))successBlock
-error:(void (^)(CCError *error))errorBlock;
+- (void)getDiscussion:(NSString *)discussionId success:(void (^)(NSArray *memberList))successBlock error:(void (^)(CCError *error))errorBlock;
 /**
 将用户移出讨论组
 
@@ -397,10 +331,7 @@ error:(void (^)(CCError *error))errorBlock;
 
 members内为移除成员后讨论组成员列表，如果讨论组成员之前不存在，也会返回成功
 */
-- (void)removeMemberFromDiscussion:(NSString *)discussionId
-userIds:(NSArray *)userIds
-success:(void (^)(NSArray *memberList))successBlock
-error:(void (^)(CCError *error))errorBlock;
+- (void)removeMemberFromDiscussion:(NSString *)discussionId userIds:(NSArray *)userIds success:(void (^)(NSArray *memberList))successBlock error:(void (^)(CCError *error))errorBlock;
 
 
 ```
@@ -418,9 +349,7 @@ error:(void (^)(CCError *error))errorBlock;
 @discussion 此方法会获取该会话中指定数量的最新消息实体，返回的消息实体按照时间从新到旧排列。
 如果会话中的消息数量小于参数count的值，会将该会话中的所有消息返回。
 */
-- (NSArray *)getLatestMessages:(CCConversationType )conversationType
-sid:(NSString *)sid
-count:(int)count;
+- (NSArray *)getLatestMessages:(CCConversationType )conversationType sid:(NSString *)sid count:(int)count;
 /*!
 获取会话中，从指定消息之前、指定数量的最新消息实体
 
@@ -435,10 +364,7 @@ count:(int)count;
 如：
 oldestMessageId为10，count为2，会返回messageId为9和8的CCMessage对象列表。
 */
-- (NSArray *)getHistoryMessages:(CCConversationType )conversationType
-sid:(NSString *)sid
-oldestMessageId:(NSNumber *)oldestMessageId
-count:(int)count;
+- (NSArray *)getHistoryMessages:(CCConversationType )conversationType sid:(NSString *)sid oldestMessageId:(NSNumber *)oldestMessageId count:(int)count;
 /*!
 通过messageId获取消息实体
 
@@ -460,8 +386,7 @@ count:(int)count;
 @param targetId            会话目标ID
 @return                    该会话中的草稿
 */
-- (MessageDraft *)getTextMessageDraft:(CCConversationType )conversationType
-targetId:(NSString *)targetId;
+- (MessageDraft *)getTextMessageDraft:(CCConversationType )conversationType targetId:(NSString *)targetId;
 
 /*!
 保存草稿信息
@@ -480,8 +405,7 @@ targetId:(NSString *)targetId;
 @param targetId            会话目标ID
 @return                    是否删除成功
 */
-- (BOOL)clearTextMessageDraft:(NSNumber *)cType
-targetId:(NSString *)targetId;
+- (BOOL)clearTextMessageDraft:(NSNumber *)cType targetId:(NSString *)targetId;
 
 ```
 
