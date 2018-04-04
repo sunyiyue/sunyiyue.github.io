@@ -7,22 +7,7 @@
         this.page.url = "{{ page.url | prepend: site.baseurl | prepend: site.url }}";
         this.page.identifier = "{{ page.url }}";
     };
-
-
-
-
-
-
     var disqus_shortname = '{{ sunyiyue-github-io }}';
-    
-    
-    if ((page.layout == 'post' || page.layout == 'page') && disqus_shortname && page.comments){ %>
-        <script type="text/javascript">
-        var disqus_config = function () {
-            this.page.url = '<%= config.url %>/<%= page.path %>';
-            this.page.identifier = '/<%= page.path %>';
-            this.page.title = '<%= page.title %>';
-        };
     
     (function() { // DON'T EDIT BELOW THIS LINE
         var d = document, s = d.createElement('script');
