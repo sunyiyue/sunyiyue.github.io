@@ -25,7 +25,12 @@ date: 2018-04-02 13:05:00.000000000 +09:00
 
 3.如果是静态库 category不能被识别
 
-找到主工程的 target －－Build Setting－－Linking－－更改其 Other Linker Flags 为： -all_load 或 -force_load 即可
+找到主工程的 target －－Build Setting－－Linking－－更改其 Other Linker Flags 为： -ObjC 或 -force_load 即可
+
+4.静态库访问不到momd   需要这样   
+![](/assets/images/2018/copyFile.png)
+
+
 
 ### 使用Framework方式
 1.将framework导入工程
