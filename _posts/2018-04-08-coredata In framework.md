@@ -1,6 +1,6 @@
 ---
 layout: post
-title: coredata In Framework
+title: CoreData In Framework
 date: 2018-04-28 16:05:00.000000000 +09:00
 ---
 
@@ -9,7 +9,7 @@ date: 2018-04-28 16:05:00.000000000 +09:00
 
 
 ### CoCall IMLib
-我在制作IMLib时使用了coredata作为本地存储的方式。
+我在制作IMLib时使用了CoreData作为本地存储的方式。
 
 ### 制作中可能遇见的问题
 
