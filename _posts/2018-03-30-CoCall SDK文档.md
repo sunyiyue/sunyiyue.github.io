@@ -7,100 +7,35 @@ date: 2018-03-30 13:05:00.000000000 +09:00
 
 
 
-### 消息对象 CCMessage (NSObject)
+###使用方法
+将CCIMLib.framework和 CCData.bundle 添加到工程中
 
-|   字段    |  类型   |                       含义                       |
-| :-------: | :-----: | :----------------------------------------------: |
-|   messageId   |  NSString   |          本地存储的消息的唯一值（数据库索引唯一值）           |
-|   msgId   |  NSNumber   |          服务器中消息ID，唯一，按时间顺序           |
-|   mType   | NSNumber |                  消息类型                   |
-|    sid    | NSString  |            会话ID，同CCSession.id             |
-|   cType   | NSNumber |          会话类型，同CCSession.type           |
-|  sender   | NSString  |                  发送人ID                   |
-|  content  | NSString  |      消息实体内容字段，可用于直接展示       |
-|  search   | NSString  | 服务器消息搜索字段,返回的数据并不含有该数据 |
-|   data    | NSString  |   消息体内容，json数据串，根据消息类型返回不同消息体    |
-| timestamp |  NSNumber   |               消息发送时间戳                |
-|    at     | BOOL |             该条消息中是否被@到             |
-|    msgStatus     | NSString |              消息发送状态 0 正在发送  -1 失败  1 成功           |
-
-### 消息类型
-
-| 字段 |            含义            |                            消息体                            |
-| :--: | :------------------------: | :----------------------------------------------------------: |
-|  1   |    本文消息    |                            String                            |
-|  2   |     图片消息    |  {id:String,url:String,md5:String,length:long,extra:String}  |
-|  3   | 文本图片消息| [{type:1,content:String},{type:2,d:String,url:String,md5:String,length:Long,extra:String}...] |
-|  4   |    文件消息    | {id:String,url:String,md5:String,length:Long,name:String,mimeType:String} |
-|  5   |    语音消息   | {id:String,url:String,md5:String,length:Long,name:String,mimeType:String} |
-|  6   |     系统消息    |                             ???                              |
-| ...  |                            |                                                              |
-| 255+ |         自定义消息         |                            String                            |
-
-
-
-
-### 会话对象 CCSession (NSObject)
-
-
-
-|   字段    |  类型   |                       含义                       |
-| :-------: | :-----: | :----------------------------------------------: |
-|    id     | NSString |                      会话Id                      |
-|   type    | NSNumber |             会话类型，见CCConversationType              |
-|   draft    | NSString  | 该会话中的草稿 |
-| readMsgId |  NSNumber   |                    已读消息ID                    |
-| timestamp |  NSNumber   |                  会话变更时间戳                  |
-|    cnt    | NSNumber |                   未读消息数量                   |
-
-
-### 会话类型  CCConversationType (枚举类型)
-
-|   字段    |  对应值   |                       含义                       |
-| :-------: | :-----: | :----------------------------------------------: |
-|    CCSingleConversation     | 1 |   单人会话类型                  |
-|    CCGroupConversation     | 3 |   讨论组会话类型                 |
-|    CCPublicConversation     | 11 |   公众号                 |
-
-### 草稿对象  MessageDraft
-
-|   字段    |  类型   |                       含义                       |
-| :-------: | :-----: | :----------------------------------------------: |
-|    text     | NSString |   草稿信息                   |
-|    cType     | NSNumber|      会话类型,同CCSession.type           |
-|    sid     | NSString|      会话ID，同CCSession.id          |
-
-### 错误信息  CCError
-
-|   字段    |  类型   |                       含义                       |
-| :-------: | :-----: | :----------------------------------------------: |
-|    code     | NSInteger |   返回代码值                 |
-|    message     | NSString |   请求数据失败原因                 |
-
-
-
-###使用方法 
-
-
-必须：把CCIMLib.framework和 CCData.bundle 添加到工程中
-
+###初始化
+在您需要使用SDK功能的类中，import 相关头文件。
 
 ```
-        [CCIMClient sharedCCIMClient].ccService = b@"172.16.11.172";
+#import <CCIMLib/CCIMClient.h>
+```
+
+连接服务器
+
+```
+        [CCIMClient sharedCCIMClient].ccService = @"172.16.11.172";
         [CCIMClient sharedCCIMClient].ccPort = @"8091";
         //系统初始化方法
-        [[CCIMClient sharedCCIMClient] userRegisterWithToken: token pushId:pushId success:^(NSString *userId) {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"登录成功" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+        [[CCIMClient sharedCCIMClient] connectWithToken:token pushId:pushId success:^(BOOL success) {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"登录成功" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
             [alert show];
-            NSLog(@"%@", userId);
-
         } error:^(CCError *error) {
             NSLog(@"%@", error.message);
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:error.message delegate:nil cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
             [alert show];
         }];
-        接收到推送实现sdk中的方法 并在消息列表页和消息详情页设置delegate并实现协议（- (void)onMessageReceived;- (void)onMessageRecalled:(NSNumber *)msgId；）
-        //appdelegate.m
+```
+
+收到推送获取消息,在appdelegate.m中调用sdk方法
+
+```
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     [[CCAppEngine shareEngine] application:application didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
 }
@@ -110,8 +45,26 @@ date: 2018-03-30 13:05:00.000000000 +09:00
     [[CCAppEngine shareEngine] userNotificationCenter:center willPresentNotification:notification withCompletionHandler:completionHandler];
 }
 
-//发送消息
+```
+###获取最近联系人、讨论组
+
+```
+    [[CCIMClient sharedCCIMClient] getRecentContact:200 success:^(NSArray *contactArray) {
+
+    } error:^(CCError *error,NSArray *contactArray) {
+
+        NSLog(@"%@", error.message);
+    }];
+```
+###消息发送
+
+发送文本消息
+
+
+```  
     CCTextMessage *mess = [[CCTextMessage alloc] initWithContent:@"测试消息"];
+    //在群组聊天中 消息中的@提醒信息 
+    mess.mentionedInfo = [[CCMentionedInfo alloc] initWithMentionedType:2 userIdList:@[@"sunyue321"]];
 	CCMessage *message = [[CCIMClient sharedCCIMClient] sendMessage:_type targetId:_sId content:mess success:^(NSString *messageId) {
        
     } error:^(CCError *error, NSString *messageId) {
@@ -120,9 +73,234 @@ date: 2018-03-30 13:05:00.000000000 +09:00
         
 ```
 
+发送语音消息
+
+```
+    NSString*filePath = [[NSBundle mainBundle] pathForResource:@"100k" ofType:@"wav"];
+    NSData *kData = [NSData dataWithContentsOfFile:filePath];
+    NSString *base64String = [kData base64EncodedStringWithOptions:0];
+    CCVoiceMessage *mess = [[CCVoiceMessage alloc] initWithContent:base64String duration:@(60) extra:@"测试声音消息"];  
+      
+    CCMessage *message = [[CCIMClient sharedCCIMClient] sendMessage:_type targetId:_sId content:mess success:^(NSString *messageId) {
+ 
+    } error:^(CCError *error, NSString *messageId) {
+        NSLog(@"错误：%@---------消息id：%@",error,messageId);
+
+    }];
 
 
-### 初始化、消息相关方法入口 CCIMClient
+```
+发送位置消息
+
+```
+	NSString*filePath = [[NSBundle mainBundle] pathForResource:@"100k" ofType:@"jpg"];
+    NSData *kData = [NSData dataWithContentsOfFile:filePath];
+    NSString *base64String = [kData base64EncodedStringWithOptions:0];
+    CCLocationMessage *mess = [[CCLocationMessage alloc] initWithLocationContent:base64String latitude:@(100.0) longitude:@(202.13) poi:@"学校" extra:@"位置消息"];
+    CCMessage *message = [[CCIMClient sharedCCIMClient] sendMessage:_type targetId:_sId content:mess success:^(NSString *messageId) {
+    
+    } error:^(CCError *error, NSString *messageId) {
+        NSLog(@"错误：%@---------消息id：%@",error,messageId);
+        
+    }];
+    	
+```
+
+
+发送图片消息
+
+
+```
+	
+	 NSString*filePath = [[NSBundle mainBundle] pathForResource:@"100k" ofType:@"jpg"];
+    NSData *kData = [NSData dataWithContentsOfFile:filePath];
+    NSString *base64String = [kData base64EncodedStringWithOptions:0];
+    CCImageMessage *imageMessage = [[CCImageMessage alloc] initWithContent:base64String extra:@"测试图片消息"];
+    
+    CCMessage *message = [[CCIMClient sharedCCIMClient] sendMediaMessage:_type targetId:_sId content:imageMessage uploadPrepare:^(CCUploadMediaStatusListener *uploadListener) {
+        //这里是您上传图片资源到自己指定服务器的代码
+        //...
+        
+        //文件上传进度0-100,使用uploadListener.updateBlock()把上传进度传递给sdk
+        uploadListener.updateBlock(100);
+        //文件上传成功后返回文件的url，使用uploadListener.successBlock()把url返回给sdk
+        uploadListener.successBlock(@"https://www.baidu.com/img/bd_logo1.png");
+        
+    } progress:^(int progress, NSString *messageId) {
+        NSLog(@"进度：%d---------消息id：%@",progress,messageId);
+    } success:^(NSString *messageId) {
+
+    } error:^(CCError *error, NSString *messageId) {
+        NSLog(@"错误：%@---------消息id：%@",error,messageId);
+        
+    }];
+
+```
+
+发送文件消息
+
+```
+    CCFileMessage *filleMessage = [[CCFileMessage alloc] initWithName:@"一个文件" size:@(100) mimeType:@"txt" extra:@"测试文件消息" localPath:nil];
+    
+    CCMessage *message = [[CCIMClient sharedCCIMClient] sendMediaMessage:_type targetId:_sId content:filleMessage uploadPrepare:^(CCUploadMediaStatusListener *uploadListener) {
+        
+		//这里是您上传文件资源到自己指定服务器的代码
+        //...
+        
+        //文件上传进度0-100,使用uploadListener.updateBlock()把上传进度传递给sdk
+        uploadListener.updateBlock(100);
+        //文件上传成功后返回文件的url，使用uploadListener.successBlock()把url返回给sdk
+        uploadListener.successBlock(@"https://www.baidu.com/img/bd_logo1.txt");
+        
+    } progress:^(int progress, NSString *messageId) {
+        NSLog(@"进度：%d---------消息id：%@",progress,messageId);
+    } success:^(NSString *messageId) {
+        
+    } error:^(CCError *error, NSString *messageId) {
+        NSLog(@"错误：%@---------消息id：%@",error,messageId);
+        
+    }];
+
+
+```
+
+发送自定义消息
+
+```
+	//创建自定义消息类 您需要继承 CCMessageContent 并实现其中的协议，来实现自定义消息。
+ 	MyCusMessage *myMessage = [[MyCusMessage alloc] init];
+    myMessage.age = @"100";
+    myMessage.woName = @"lilei";
+    CCMessage *message = [[CCIMClient sharedCCIMClient] sendCustomMessage:_type targetId:_sId mType:@(288) messageContent:myMessage search:@"自定义消息" pushContent:@"[自定义]" success:^(NSString *messageId) {
+        CCMessage *message =  [[CCIMClient sharedCCIMClient] getMessageByMessageId:[NSString stringWithFormat:@"%@",messageId]];
+ 
+    } error:^(CCError *error, NSString *messageId) {
+        NSLog(@"%@", error.message);
+
+    }];
+
+
+```
+
+###消息接收监听
+
+```
+//设置并实现此Delegate监听消息接收
+//可以直接赋值属性，也可以调用- (void)setReceiveMessageDelegate:;方法设置
+@property(nonatomic, weak) id<CCReceiveMessageDelegate> receiveDelegate;
+
+
+
+```
+接收消息
+
+```
+/*!
+ 接收消息的回调方法
+ @param message     当前接收到的消息
+ @param nLeft       还剩余的未接收的消息数，left>=0
+ 注意：在设置Delegate的类中，接收到任何消息都会执行
+ */
+- (void)onReceived:(CCMessage *)message left:(int)nLeft;
+```
+收到消息撤回推送
+
+```
+/*!
+ 消息被撤回的回调方法
+ 
+ @param messageId 被撤回的消息ID
+ 
+ @discussion 当有消息被撤回App需要在UI上刷新这条消息。
+ */
+- (void)onMessageRecalled:(NSString *)messageId;
+
+```
+
+输入状态监听
+
+```
+/**
+ 输入状态的监听器,设置并实现此Delegate监听消息接收
+ @warning 目前仅支持单聊。
+ @也可以调用- (void)setCCTypingStatusDelegate:;方法设置
+ */
+@property(nonatomic, weak) id<CCTypingStatusDelegate> typingDelegate;
+```
+接收到输入状态推送
+
+```
+/*!
+ 用户输入状态变化的回调
+ 
+ @param conversationType        会话类型
+ @param sid                会话目标ID
+ 
+ @discussion 当客户端收到用户输入状态的变化时，会回调此接口
+ 
+ @warning 目前仅支持单聊。
+*/
+- (void)onTypingStatusChanged:(CCConversationType)conversationType
+                     sid:(NSString *)sid {
+       self.navigationItem.title = @"对方正在输入...";
+
+ }
+
+```
+
+###获取群内成员已读状态
+```
+    //    设置获取成员已读状态
+    [[CCIMClient sharedCCIMClient] getReadStat:_sid type:_type timestamp:0];
+    //实现代理		
+    /**
+	 获取到会话中成员的已读状态
+
+	 @param conversationType 会话类型
+	 @param sid 会话ID
+	 @param statDict 会话成员已读到的消息msgid
+                key为用户ID，value是该用户已读的消息ID
+ 	*/
+    - (void)onMessageReceiptResponse:(CCConversationType)conversationType sid:(NSString *)sid statDict:(NSDictionary *)statDict {
+   		 NSLog(@"%d----%@-------%@",conversationType,sid,statDict);
+	}
+
+```
+
+###群组相关
+```
+		// 创建讨论组
+			NSArray *arr = @[@"用户id",@"用户id"];
+        [[CCIMClient sharedCCIMClient] createDiscussionByUserIdList:arr success:^(BOOL success, CCGroupInfo *group, NSString *message) {
+            if (success) {
+                
+            }
+        } error:^(CCError *error) {
+           NSLog(@"%@", error.message);
+        }];
+        //添加成员
+        [[CCIMClient sharedCCIMClient] addMemberToDiscussion:_addGruopId userIdList:arr success:^(NSArray *memberList) {
+
+        } error:^(CCError *error) {
+            NSLog(@"%@", error.message);
+        }];
+        //获取讨论组成员列表
+        [[CCIMClient sharedCCIMClient] getDiscussion:_groupId success:^(NSArray *memberList) {
+        
+   			 } error:^(CCError *error) {
+        
+    	 }];
+    	     // 删除讨论组成员
+
+    [[CCIMClient sharedCCIMClient] removeMemberFromDiscussion:_groupId userIds:arr success:^(NSArray *memberList) {
+
+    } error:^(CCError *error) {
+        NSLog(@"%@", error.message);
+    }];
+```
+
+
+###  CCIMClient
 ```
 
 
@@ -130,13 +308,13 @@ date: 2018-03-30 13:05:00.000000000 +09:00
  系统初始化方法
  
  @param pushId  推送使用的deviceToken
- @param successBlock 用户ID
+ @param successBlock 连接成功
  @param errorBlock 错误信息
  */
 
-- (void)userRegisterWithToken:(NSString *)token
+- (void)connectWithToken:(NSString *)token
                        pushId:(NSString *)pushId
-                      success:(void (^)(NSString *userId))successBlock
+                      success:(void (^)(BOOL success))successBlock
                         error:(void(^)(CCError *error))errorBlock;
 
 /**
@@ -149,6 +327,10 @@ date: 2018-03-30 13:05:00.000000000 +09:00
                         error:(void(^)(CCError *error))errorBlock;
 #pragma mark - 消息接收提醒
 /**
+ 消息接收监听器
+ */
+@property(nonatomic, weak) id<CCReceiveMessageDelegate> receiveDelegate;
+/**
  设置消息接收监听器
  
  @param delegate 消息接收监听器
@@ -156,7 +338,11 @@ date: 2018-03-30 13:05:00.000000000 +09:00
 - (void)setReceiveMessageDelegate:(id<CCReceiveMessageDelegate>)delegate;
 
 #pragma mark - 输入状态提醒
-
+/**
+ 输入状态的监听器
+ @warning 目前仅支持单聊。
+ */
+@property(nonatomic, weak) id<CCTypingStatusDelegate> typingDelegate;
 /*!
  设置输入状态的监听器
  
@@ -168,7 +354,7 @@ date: 2018-03-30 13:05:00.000000000 +09:00
 
 #pragma mark - 消息相关
 /**
- 发送文字消息
+ 发送 文字、语音 消息
  必填
  @param conversationType 会话类型             是
  @param targetId 联系人ID/讨论组ID             是
@@ -185,7 +371,7 @@ date: 2018-03-30 13:05:00.000000000 +09:00
 
 
 /**
- 发送媒体消息(上传图片、语音或文件媒体信息到指定的服务器)
+ 发送媒体消息(上传图片或文件 媒体信息到指定的服务器)
 
  @param conversationType conversationType 会话类型
  @param targetId 联系人ID/讨论组ID
@@ -203,26 +389,31 @@ date: 2018-03-30 13:05:00.000000000 +09:00
                   progress:(void (^)(int progress, NSString *messageId))progressBlock
                    success:(void (^)(NSString *messageId))successBlock
                      error:(void(^)(CCError *error,NSString *messageId))errorBlock;
-
-
+                     
 /**
  发送自定义消息
                                             必填
  @param conversationType 会话类型             是
  @param targetId 联系人ID/讨论组ID             是
+ @param mType 自定义消息类型(使用255以上的数字)    是
+ @param search 服务器用于搜索的字段              是
+ @param content  接收方离线时需要显示的远程推送内容    是
  @param messageContent 消息的内容              是
  @param successBlock 消息ID
  @param errorBlock 错误信息
   */
 - (CCMessage *)sendCustomMessage:(CCConversationType)conversationType
                         targetId:(NSString *)targetId
-                         content:(CCMessageContent *)messageContent
+                           mType:(NSNumber *)mType
+                  messageContent:(CCMessageContent *)messageContent
+                          search:(NSString *)search
+                     pushContent:(NSString *)content
                          success:(void (^)(NSString *messageId))successBlock
                            error:(void(^)(CCError *error,NSString *messageId))errorBlock;
 
 
 /**
- 获取最近联系人/讨论组
+ 获取最近联系人/讨论组(全量/增量)
  
  @param size 获取最新会话列表最大条数，默认200
  @param successBlock 联系人/讨论组信息组成的数组
@@ -308,21 +499,6 @@ date: 2018-03-30 13:05:00.000000000 +09:00
            msgId:(NSNumber *)msgId
          success:(void (^)(BOOL success))successBlock
            error:(void(^)(CCError *error))errorBlock;
-/**
- 批量置已读
- 
- @param ids 会话ID列表
- @param types conversationType组成的数组 会话类型列表，见SessionType
- @param msgIds 已读的消息ID列表
- @param successBlock 置已读成功success返回true
- @param errorBlock 错误信息
- 注意：会话列表 会话类型 已读消息id的顺序要严格对应
- */
-- (void)chatsRead:(NSArray *)ids
-             type:(NSArray *)types
-           msgIds:(NSArray *)msgIds
-          success:(void (^)(BOOL success,NSString *message))successBlock
-            error:(void(^)(CCError *error))errorBlock;
 
 /**
  会话消息输入，目前只支持1V1
@@ -337,14 +513,6 @@ date: 2018-03-30 13:05:00.000000000 +09:00
            success:(void (^)(BOOL success,NSString *message))successBlock
              error:(void(^)(CCError *error))errorBlock;
 
-/**
- 接收到对方正在输入的推送会调用次方法
- 设置 setCCTypingStatusDelegate 代理并实现协议（- (void)onTypingStatusChanged:(CCConversationType)conversationType sid:(NSString *)sid）的页面会接收到数据
- @param cType 会话类型 @warning 目前仅支持单聊
- @param sid 会话id
- */
-- (void)receiveTypingPushWithCType:(int)cType
-                               sid:(NSString *)sid;
 /**
  搜索指定会话中包含关键字的消息记录
  
@@ -388,13 +556,6 @@ date: 2018-03-30 13:05:00.000000000 +09:00
  */
 - (BOOL)deleteMessageByMsgId:(NSNumber *)msgId;
 
-/**
- 通过msgId获取消息实体
- 
- @param msgId 服务器中消息ID
- @return ture 删除成功  false 删除失败
- */
-- (CCMessage *)getMessageByMsgId:(NSNumber *)msgId;
 /*!
  通过messageId获取消息实体
  
@@ -402,13 +563,6 @@ date: 2018-03-30 13:05:00.000000000 +09:00
  @return            通过消息ID获取到的消息实体，当获取失败的时候，会返回nil。
  */
 - (CCMessage *)getMessageByMessageId:(NSString *)messageId;
-/**
- 获取某一会话中本地已存储的最新的一条消息
- @param conversationType 会话类型
- @return 通过消息ID获取到的消息实体，当获取失败的时候，会返回nil。
- */
-- (CCMessage *)getSessionNewMessageBySid:(NSString *)sid
-                                    type:(CCConversationType)conversationType;
 
 /**
  删除本地消息
@@ -417,6 +571,7 @@ date: 2018-03-30 13:05:00.000000000 +09:00
  @return ture 删除成功  false 删除失败
  */
 - (BOOL)deleteMessageByMessageId:(NSString *)messageId;
+
 #pragma mark - 群组相关
 /**
  获取时间戳之后变化的讨论组信息
@@ -434,6 +589,18 @@ date: 2018-03-30 13:05:00.000000000 +09:00
 - (void)createDiscussionByUserIdList:(NSArray *)userIdList
                              success:(void (^)(BOOL success,CCGroupInfo *group,NSString *message))successBlock
                                error:(void (^)(CCError *error))errorBlock;
+/**
+修改讨论组名称
+
+@param discussionId 讨论组ID
+@param discussionName 讨论组名称
+@param successBlock 返回 true 成功 false失败
+@param errorBlock 错误信息
+*/
+- (void)changeDiscussionNameById:(NSString *)discussionId
+                            name:(NSString *)discussionName
+                         success:(void (^)(BOOL success))successBlock
+                           error:(void (^)(CCError *error))errorBlock;
 
 /**
  讨论组添加成员
@@ -502,7 +669,12 @@ date: 2018-03-30 13:05:00.000000000 +09:00
                      muted:(BOOL)muted
                    success:(void (^)(BOOL success))successBlock
                      error:(void (^)(CCError *error))errorBlock;
+#pragma mark 数据库路径
 
+/**
+获取本地数据库路径
+*/
+- (NSURL *)getMsgDBPath;
 #pragma mark - 草稿相关
 /*!
  保存草稿信息
@@ -515,24 +687,23 @@ date: 2018-03-30 13:05:00.000000000 +09:00
  获取会话中的草稿信息
  
  @param conversationType     会话类型
- @param targetId            会话目标ID
+ @param targetId            会话ID
  @return                    该会话中的草稿
  */
 - (MessageDraft *)getTextMessageDraft:(CCConversationType )conversationType
                              targetId:(NSString *)targetId;
-- (NSInteger)getBadgeNumber;
+
 /*!
  删除会话中的草稿信息
  
  @param cType     会话类型，同Session.type
  1    单人会话
  3    讨论组会话
- @param targetId            会话目标ID
+ @param targetId            会话ID
  @return                    是否删除成功
  */
 - (BOOL)clearTextMessageDraft:(NSNumber *)cType
                      targetId:(NSString *)targetId;
 
 ```
-
   
