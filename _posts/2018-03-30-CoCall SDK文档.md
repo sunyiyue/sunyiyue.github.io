@@ -9,6 +9,9 @@ date: 2018-03-30 13:05:00.000000000 +09:00
 
 ###使用方法
 将CCIMLib.framework和 CCData.bundle 添加到工程中
+或者：
+
+pod 'CCIMLib'
 
 ###初始化
 在您需要使用SDK功能的类中，import 相关头文件。
