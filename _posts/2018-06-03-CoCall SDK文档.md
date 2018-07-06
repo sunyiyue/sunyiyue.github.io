@@ -23,8 +23,8 @@ pod 'CCIMLib'
 连接服务器
 
 ```
-        [CCIMClient sharedCCIMClient].ccService = @"172.16.11.172";
-        [CCIMClient sharedCCIMClient].ccPort = @"8091";
+        [CCIMClient sharedCCIMClient].ccService = @"服务器地址2";
+        [CCIMClient sharedCCIMClient].ccPort = @"端口号";
         //系统初始化方法
         [[CCIMClient sharedCCIMClient] connectWithToken:token pushId:pushId success:^(BOOL success) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"登录成功" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
